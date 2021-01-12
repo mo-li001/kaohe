@@ -1,3 +1,4 @@
+
 (function () {
     var myChart = echarts.init(document.querySelector(".content .datadir"));
     var colorList = ["#4587f0"];
@@ -35,7 +36,7 @@
             {
                 type: 'category',
                 boundaryGap: false,
-                data: ['01/26', '01/28', '01/30', '02/01', '02/03', '02/05', '02/07',, '02/09', '02/11', '02/13', '02/15', '02/17', '02/19', '02/21', '02/23'],
+                data: [],
                 //修改刻度标签 相关样式
                 axisLabel: {
                 color: "rgba(0,0,0,.6)",
@@ -75,34 +76,6 @@
             }
         ],
         series: [
-            // {
-            //     name: '邮件营销',
-            //     type: 'line',
-            //     stack: '总量',
-            //     areaStyle: {},
-            //     data: [120, 132, 101, 134, 90, 230, 210]
-            // },
-            // {
-            //     name: '联盟广告',
-            //     type: 'line',
-            //     stack: '总量',
-            //     areaStyle: {},
-            //     data: [220, 182, 191, 234, 290, 330, 310]
-            // },
-            // {
-            //     name: '视频广告',
-            //     type: 'line',
-            //     stack: '总量',
-            //     areaStyle: {},
-            //     data: [150, 232, 201, 154, 190, 330, 410]
-            // },
-            // {
-            //     name: '直接访问',
-            //     type: 'line',
-            //     stack: '总量',
-            //     areaStyle: {},
-            //     data: [320, 332, 301, 334, 390, 330, 320]
-            // },
             {
                 // name: '搜索引擎',
                 type: 'line',
@@ -118,10 +91,48 @@
                     opacity: 0.2,
                     backgroundColor: "#2718b4"
                 },
-                data: [820, 932, 901, 934, 1290, 1330, 1320,820, 932, 901, 934, 1290, 1330, 1320,1330]
+                data: []
             }
         ]
     };
+    $.ajax({
+        type : "get",
+        async : true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+        url : "https://edu.telking.com/api/?type=month",    //请求发送到TestServlet处
+        data : {},
+        dataType : "json",        //返回数据形式为json
+        success : function(result1) {
+            console.log(result1);
+            //请求成功时执行该函数内容，result即为服务器返回的json对象
+            if (result1) {
+                
+                var series = result1.data.series;   
+                var xAxis = result1.data.xAxis;   
+            }
+            myChart.setOption(
+                {
+                    xAxis: [
+                        {
+                            data: xAxis
+                        }
+                    ],
+                    series: [{
+                        // 根据名字对应到相应的系列
+                        name: '',
+                        
+                        type: 'line',
+                        data: series
+                    }]
+                }
+            )
+            
+        },
+        error : function(errorMsg) {
+            //请求失败时执行该函数
+            alert("图表请求数据失败!");
+            myChart.hideLoading();
+        }
+    });
     myChart.setOption(option);
 })();
 //图2
@@ -149,15 +160,7 @@
                 type: 'pie',
                 radius: '55%',
                 center: ['50%', '60%'],
-                data: [
-                    {value: 276, name: 'Mon'},
-                    {value: 6680, name: 'Tue'},
-                    {value: 2354, name: 'Wed'},
-                    {value: 8346, name: 'Thu'},
-                    {value: 5056, name: 'Fri'},
-                    {value: 9928, name: 'Sat'},
-                    {value: 2623, name: 'Sun'}
-                ],
+                data: [],
                 emphasis: {
                     itemStyle: {
                         shadowBlur: 10,
@@ -168,11 +171,57 @@
             }
         ]
     };
+    $.ajax({
+        type : "get",
+        async : true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+        url : "https://edu.telking.com/api/?type=week",    //请求发送到TestServlet处
+        data : {},
+        dataType : "json",        //返回数据形式为json
+        success : function(result2) {
+            console.log(result2);
+            //请求成功时执行该函数内容，result即为服务器返回的json对象
+            if (result2) {
+                var xAxis = result2.data.xAxis;
+                var series = result2.data.series; 
+                
+               
+                 
+                
+                
+            }
+            myChart.setOption(
+                {
     
+                    series: [{
+                        // 根据名字对应到相应的系列
+                        name: '访问来源',
+                        
+                        type: 'pie',
+                        data: [
+                            {value: series[0], name: xAxis[0]},
+                            {value: series[1], name: xAxis[1]},
+                            {value: series[2], name: xAxis[2]},
+                            {value: series[3], name: xAxis[3]},
+                            {value: series[4], name: xAxis[4]},
+                            {value: series[5], name: xAxis[5]},
+                            {value: series[6], name: xAxis[6]}
+                            
+                        ]
+                    }]
+                }
+            )
+            
+        },
+        error : function(errorMsg) {
+            //请求失败时执行该函数
+            alert("图表请求数据失败!");
+            myChart.hideLoading();
+        }
+    });  
     //3.把配置给实例对象
     myChart.setOption(option);
 })();
-//图3
+// 图3
 (function (){
     //1.实例化对象
     var myChart = echarts.init(document.querySelector("#graphs_right"));
@@ -188,6 +237,9 @@
             axisPointer: {            // 坐标轴指示器，坐标轴触发有效
                 type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
             }
+        },
+        legend: {
+            data: ['']
         },
         grid: {
             left: '3%',
@@ -254,73 +306,48 @@
                 name: '直接访问',
                 type: 'bar',
                 barWidth: '30%',
-                data: [276, 6680, 2354, 8346, 5056, 9928, 2623]
+                data: []
             }
         ]
     };
-    // var xhr = new XMLHttpRequest();
-    // xhr.open('get','https://edu.telking.com/api/?type=month');
-    //     xhr.onload = function(){
-    //         console.log(xhr.responseText);
-    //         // document.querySelector('data').innerdata = xhr.responseText;
-    //     }
-    //     xhr.send(null);
+//利用数组，自己将东西直接接收
+var series=[];
 
-    // var xhr = new XMLHttpRequest();
-    // xhr.open('get','https://edu.telking.com/api/?type=week');
-    //     xhr.onload = function(result){
-    //         if (result.status) {
-    //             var list = result.list;
-    //             for(var i=0;i<list.length;i++){
-    //                 data['200'].push(list[i].data);
-    //             }
-    //             for(var i=0;i<list.length;i++){
-    //                 data['200'].push(list[i].xAxis);
-    //             }
-    //             for(var i=0;i<list.length;i++){
-    //                 data['200'].push(list[i].precipitation);
-    //             }
-    //             myChart.hideLoading();
-    //             myChart.setOption({
-    //                 tooltip : {
-    //                     trigger: 'xAxis'
-    //                 },
-    //                 legend: {
-    //                     data:['category']
-    //                 },
-    //                 toolbox: {
-    //                     show : true,
-    //                     feature : {
-    //                         mark : {show: true},
-    //                         dataView : {show: true, readOnly: false},
-    //                         magicType : {show: true, type: ['line', 'bar']},
-    //                         restore : {show: true},
-    //                         saveAsImage : {show: true}
-    //                     }
-    //                 },
-    //                 calculable : true,
-    //                 xAxis: {
-    //                 data: data['200'].series
-    //                 },
-    //                 yAxis:{},//注意一定不能丢了这个，不然图表Y轴不显示
-    //                 series: [{
-    //                 // 根据名字对应到相应的系列，并且要注明type
-    //                 name: '直接访问',
-    //                 type:'bar',
-    //                 data: data['200'].series
-    //             },{
-    //                 // 根据名字对应到相应的系列，并且要注明type
-    //                 name: '直接访问',
-    //                 type:'bar',
-    //                 data: precipitations
-    //             }]
-                
-    //             })
-    //         }
+//利用ajax动态获取数据，地址为java提供的接口
+$.ajax({
+    type : "get",
+    async : true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+    url : "https://edu.telking.com/api/?type=week",    //请求发送到TestServlet处
+    data : {},
+    dataType : "json",        //返回数据形式为json
+    success : function(result3) {
+        console.log(result3);
+        //请求成功时执行该函数内容，result即为服务器返回的json对象
+        if (result3) {
             
-    //     }
-        // xhr.send();
+            var series = result3.data.series;        
+        }
+        myChart.setOption(
+            {
 
+                series: [{
+                    // 根据名字对应到相应的系列
+                    name: '数值量',
+                    
+                    type: 'bar',
+                    data: series
+                }]
+            }
+        )
+        
+    },
+    error : function(errorMsg) {
+        //请求失败时执行该函数
+        alert("图表请求数据失败!");
+        myChart.hideLoading();
+    }
+});
+         
     //3.把配置给实例对象
     myChart.setOption(option);
 })();
