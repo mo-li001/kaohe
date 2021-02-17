@@ -2,6 +2,7 @@ body {
     margin:0px;
     padding:0px;
     background:#fff;
+    
     /* font-family:"Arial Black", Arial, Helvetica, sans-serif;*/
 }
 * {
@@ -13,6 +14,8 @@ body {
     width: 1440px;
     height: 1666px;
     background-color: #f5f8f9;
+    
+    margin:0 auto
 }
 #nav {
     width: 1440px;
@@ -89,23 +92,34 @@ body {
     position: relative;
 }
 .banner_left ul,li {list-style: none;}
-.banner_left_box1 ul li {
+a{
+    text-decoration: none;
+}
+.container {
+    position: relative;
     width: 539px;
     height: 267px;
-    position: relative;
+    
     overflow: hidden;
 }
-.banner_left_box1 ul li img {
-    display: block;
-    width: 539px;
-    height: 267px;
+.container .wrap {
+    position: absolute;
+    width: 4200px;
+    height: 400px;
+    z-index: 1;
 }
-.banner_left_box2 {
+.container .wrap img {
+    float: left;
+    width: 600px;
+    height: 400px;
+}
+.container .buttons {
     position: absolute;
     right: 214.5px;
     bottom: 14px;
+    z-index: 2;
 }
-.banner_left_box2 ul li {
+.container .buttons span {
     float: left;
     width: 12px;
     height: 12px;
@@ -116,10 +130,12 @@ body {
     text-indent: 100px;
     cursor: pointer;
 }
-.banner_left_box2 ul .on {
-    background: rgba(255, 255, 255, 0.6);
+.container .buttons span.on{
+    background-color: rgba(255, 255, 255, 0.8);
 }
-.banner_left_box3 span {
+.container .arrow {
+    z-index: 2;
+    display: none;
     position: absolute;
     color: white;
     background: rgba(0, 0, 0, .3);
@@ -134,17 +150,17 @@ body {
     text-align: center;
     cursor: pointer;
 }
-.banner_left_box3 .prev {
+.container .arrow_left {
     left: 10px;
 }
-.banner_left_box3 .next {
+.container .arrow_right {
     right: 10px;
 }
-.banner_left_box3 span::selection {
-    background: transparent;
+.container:hover .arrow {
+    display: block;
 }
-.banner_left_box3 span:hover {
-    background: rgba(0, 0, 0, .8);
+.container .arrow:hover {
+    background-color: rgba(0,0,0,0.2);
 }
 #banner_right {
     width: 560px;
@@ -216,27 +232,27 @@ body {
 }
 .datadir {
     width: 1130px;
-    height: 290px;
+    height: 350px;
     background-color: #ffffff;
     margin-left: 160px;
     margin-top: 20px;
 }
 #graphs {
     width: 1130px;
-    height: 290px;
+    height: 350px;
     margin-left: 160px;
     margin-top: 20px;
 }
 #graphs_left {
     width: 555px;
-    height: 290px;
+    height: 350px;
     margin-right: 20px;
     background-color: #ffffff;
     float: left;
 }
 #graphs_right {
     width: 555px;
-    height: 290px;
+    height: 350px;
     background-color: #ffffff;
     float: right;
 }
@@ -259,7 +275,7 @@ body {
 }
 #friendlink {
     min-width: 930px;
-    height: 300px;
+    min-height: 300px;
     float: left;
     padding-top: 65px;
     padding-left: 75px;
