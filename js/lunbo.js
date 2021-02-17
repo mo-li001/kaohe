@@ -1,94 +1,79 @@
-window.onload = function(lunbo){
-    function $(param){
-        if(arguments[1] == true){
-            return document.querySelectorAll(param);
-        }else{
-            return document.querySelector(param);
-        }
+var wrap = document.querySelector(".wrap");
+var next = document.querySelector(".arrow_right");
+var prev = document.querySelector(".arrow_left");
+next.onclick = function () {
+    next_pic();
+}
+prev.onclick = function () {
+    prev_pic();
+}
+function next_pic () {
+    index++;
+    if(index > 4){
+        index = 0;
     }
-    var $banner_left = $(".banner_left");
-    var $banner_left_box1 = $(".banner_left_box1 ul li",true);
-    var $banner_left_box2 = $(".banner_left_box2 ul");
-    var $banner_left_box3 = $(".banner_left_box3");
-    var $length = $banner_left_box1.length;
-    
-    var str = "";
-    for(var i =0;i<$length;i++){
-        if(i==0){
-            str +="<li class='on'>"+(i+1)+"</li>";
-        }else{
-            str += "<li>"+(i+1)+"</li>";
-        }
+    showCurrentDot();
+    var newLeft;
+    if(wrap.style.left === "-3600px"){
+        newLeft = -1200;
+    }else{
+        newLeft = parseInt(wrap.style.left)-600;
     }
-    $banner_left_box2.innerHTML = str;
-    
-    var current = 0;
-    
-    var timer;
-    timer = setInterval(go,1000);
-    function go(){
-        for(var j =0;j<$length;j++){
-            $banner_left_box1[j].style.display = "none";
-            $banner_left_box2.children[j].className = "";
-        }
-        if($length == current){
-            current = 0;
-        }
-        $banner_left_box1[current].style.display = "block";
-        $banner_left_box2.children[current].className = "on";
-        current++;
+    wrap.style.left = newLeft + "px";
+}
+function prev_pic () {
+    index--;
+    if(index < 0){
+        index = 4;
     }
-    
-    for(var k=0;k<$length;k++){
-        $banner_left_box1[k].onmouseover = function(){
-            clearInterval(timer);
-        }
-        $banner_left_box1[k].onmouseout = function(){
-            timer = setInterval(go,1000);
-        }
+    showCurrentDot();
+    var newLeft;
+    if(wrap.style.left === "0px"){
+        newLeft = -2400;
+    }else{
+        newLeft = parseInt(wrap.style.left)+600;
     }
-    for(var p=0;p<$banner_left_box3.children.length;p++){
-        $banner_left_box3.children[p].onmouseover = function(){
-            clearInterval(timer);
-        };
-        $banner_left_box3.children[p].onmouseout = function(){
-            timer = setInterval(go,1000);
-        }
+    wrap.style.left = newLeft + "px";
+}
+var timer = null;
+function autoPlay () {
+    timer = setInterval(function () {
+        next_pic();
+    },2000);
+}
+autoPlay();
+
+var container = document.querySelector(".container");
+container.onmouseenter = function () {
+    clearInterval(timer);
+}
+container.onmouseleave = function () {
+    autoPlay();    
+}
+
+var index = 0;
+var dots = document.getElementsByTagName("span");
+function showCurrentDot () {
+    for(var i = 0, len = dots.length; i < len; i++){
+        dots[i].className = "";
     }
-    
-    for(var u =0;u<$length;u++){
-        $banner_left_box2.children[u].index  = u;
-        $banner_left_box2.children[u].onmouseover = function(){
-            clearInterval(timer);
-            for(var j=0;j<$length;j++){
-                $banner_left_box1[j].style.display = "none";
-                $banner_left_box2.children[j].className = "";
+    dots[index].className = "on";
+}
+
+for (var i = 0, len = dots.length; i < len; i++){
+    (function(i){
+        dots[i].onclick = function () {
+            var dis = index - i;
+            if(index == 4 && parseInt(wrap.style.left)!==-3000){
+                dis = dis - 5;     
             }
-            this.className = "on";
-            $banner_left_box1[this.index].style.display = "block";
-            current = this.index +1;
+            //和使用prev和next相同，在最开始的照片5和最终的照片1在使用时会出现问题，导致符号和位数的出错，做相应地处理即可
+            if(index == 0 && parseInt(wrap.style.left)!== -600){
+                dis = 5 + dis;
+            }
+            wrap.style.left = (parseInt(wrap.style.left) +  dis * 600)+"px";
+            index = i;
+            showCurrentDot();
         }
-        $banner_left_box2.children[u].onmouseout = function(){
-            timer = setInterval(go,1000);
-        }
-    }
-    
-    $banner_left_box3.children[0].onclick = function(){
-        back();
-    }
-    $banner_left_box3.children[1].onclick = function(){
-        go();
-    }
-    function back(){
-        for(var j =0;j<$length;j++){
-            $banner_left_box1[j].style.display = "none";
-            $banner_left_box2.children[j].className = "";
-        }
-        if(current == 0){
-            current = $length;
-        }
-        $banner_left_box1[current-1].style.display = "block";
-        $banner_left_box2.children[current-1].className = "on";
-        current--;
-    }
+    })(i);            
 }
